@@ -282,6 +282,28 @@
   .dash-stats .ds b{display:block;font-family:'Fraunces';font-size:1.5rem;color:var(--honey)}
   .dash-stats .ds span{font-size:.78rem;color:#cabfad}
   .sub-grid{display:grid;gap:16px}
+  /* folder view */
+  .folder-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:16px}
+  .folder{display:flex;flex-direction:column;align-items:center;text-align:center;gap:8px;cursor:pointer;
+    padding:18px 12px;border-radius:16px;border:1px solid transparent;transition:.18s}
+  .folder:hover{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.14);transform:translateY(-3px)}
+  .folder svg{width:62px;height:54px;filter:drop-shadow(0 8px 14px rgba(0,0,0,.35))}
+  .folder .fname{font-family:'Fraunces';font-weight:600;font-size:1.02rem;color:#fff;max-width:100%;
+    white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .folder .fmeta{font-size:.78rem;color:#b6ada0}
+  /* folder modal */
+  .modal-overlay{position:fixed;inset:0;z-index:200;background:rgba(15,12,9,.72);backdrop-filter:blur(4px);
+    display:none;align-items:center;justify-content:center;padding:20px}
+  .modal-overlay.show{display:flex}
+  .modal-card{position:relative;background:#fff;color:var(--ink);border-radius:22px;padding:30px;
+    width:min(560px,94vw);max-height:88vh;overflow-y:auto;box-shadow:var(--shadow)}
+  .modal-close{position:absolute;top:14px;right:16px;background:var(--cream-2);border:none;width:34px;height:34px;
+    border-radius:50%;font-size:1.3rem;cursor:pointer;color:var(--ink-soft);line-height:1}
+  .modal-close:hover{background:var(--honey-soft)}
+  .fb-head{display:flex;gap:16px;align-items:center}
+  .fb-ic svg{width:60px;height:52px}
+  .fb-label{font-weight:700;color:var(--ink-soft);font-size:.85rem;text-transform:uppercase;letter-spacing:.05em;margin:6px 0 10px}
+  .fb-actions{margin-top:22px;border-top:1px solid var(--line);padding-top:18px}
   .dash-tabs{display:flex;gap:8px;flex-wrap:wrap}
   .dtab{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);color:#cabfad;
     font-family:'Fraunces';font-weight:600;font-size:1.15rem;cursor:pointer;padding:8px 18px;border-radius:12px;transition:.2s}
@@ -709,6 +731,13 @@
 
 <div class="toast" id="toast"></div>
 
+<div class="modal-overlay" id="folderModal" onclick="if(event.target===this)closeFolder()">
+  <div class="modal-card">
+    <button class="modal-close" onclick="closeFolder()" aria-label="Close">×</button>
+    <div id="folderBody"></div>
+  </div>
+</div>
+
 <!-- Supabase client (loads on your live site; preview falls back to demo mode) -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
@@ -723,8 +752,8 @@ $('yr').textContent = new Date().getFullYear();
    Row Level Security policies in your setup SQL.
    While these say "YOUR_...", the site runs in demo mode.
 ============================================================ */
-const SUPABASE_URL      = "YOUR_SUPABASE_URL";       // e.g. https://abcd1234.supabase.co
-const SUPABASE_ANON_KEY = "YOUR_SUPABASE_ANON_KEY";  // the long "anon public" key
+const SUPABASE_URL      = "https://giajrhzenwakkdpzxtlp.supabase.co";
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdpYWpyaHplbndha2tkcHp4dGxwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAzNTAyMzYsImV4cCI6MjA5NTkyNjIzNn0.62iibR2b_0-mAR_ugsjG-q89cWddleRLgDOIGmgbRMg";
 const SB_BUCKET = "candidate-docs";
 const SB_TABLE  = "submissions";
 const SB_MSG_TABLE = "messages";
@@ -1167,39 +1196,62 @@ async function loadSubmissions(){
   renderSubs($('subSearch')?$('subSearch').value:'');
 }
 
+function folderSVG(){
+  return `<svg viewBox="0 0 64 54" fill="none" aria-hidden="true">
+    <path d="M5 10a3 3 0 0 1 3-3h12.5a3 3 0 0 1 2.2 1l3.1 3.4a3 3 0 0 0 2.2 1H56a3 3 0 0 1 3 3v3H5z" fill="#C5870F"/>
+    <path d="M5 15h54a3 3 0 0 1 3 3v26a3 3 0 0 1-3 3H8a3 3 0 0 1-3-3z" fill="#E6A817"/>
+    <rect x="5" y="15" width="54" height="4" fill="#F6D77A" opacity=".55"/>
+  </svg>`;
+}
 function renderSubs(query){
   const grid=$('subGrid'); const q=(query||'').trim().toLowerCase();
   const list = q ? ALL_SUBS.filter(s=>(s.name||'').toLowerCase().includes(q)) : ALL_SUBS;
   const countEl=$('subCount');
   if(countEl) countEl.textContent = q ? `${list.length} of ${ALL_SUBS.length}` : `${ALL_SUBS.length} total`;
 
-  if(ALL_SUBS.length===0){ grid.innerHTML='<div class="empty"><div class="ei">🐝</div>No submissions yet. Candidate uploads will appear here.</div>'; return; }
-  if(list.length===0){ grid.innerHTML=`<div class="empty"><div class="ei">🔍</div>No applicants match “${esc(query)}”.</div>`; return; }
+  if(ALL_SUBS.length===0){ grid.className='sub-grid'; grid.innerHTML='<div class="empty"><div class="ei">🐝</div>No submissions yet. Candidate uploads will appear here.</div>'; return; }
+  if(list.length===0){ grid.className='sub-grid'; grid.innerHTML=`<div class="empty"><div class="ei">🔍</div>No applicants match “${esc(query)}”.</div>`; return; }
 
+  grid.className='folder-grid';
   grid.innerHTML='';
   list.forEach(s=>{
-    const card=document.createElement('div'); card.className='sub';
-    const date=new Date(s.submittedAt).toLocaleString();
-    const chips=(s.files||[]).map((f,i)=>`<span class="doc-chip" onclick='downloadFile(${JSON.stringify(String(s.id))},${i})'>
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M12 4v12m0 0-5-5m5 5 5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      ${esc(f.name)}</span>`).join('');
-    card.innerHTML=`
-      <div class="sub-head">
-        <div>
-          <div class="who">${esc(s.name)}</div>
-          <div class="meta">Submitted ${date}</div>
-          ${s.role?`<span class="role-pill">${esc(s.role)}</span>`:''}
-        </div>
-        <button class="del" onclick='delSub(${JSON.stringify(String(s.id))})'>Delete</button>
-      </div>
-      <div class="sub-contact">
-        <span>✉ ${esc(s.email)}</span>${s.phone?`<span>☎ ${esc(s.phone)}</span>`:''}
-      </div>
-      <div class="sub-files">${chips}</div>`;
-    grid.appendChild(card);
+    const n=(s.files||[]).length;
+    const tile=document.createElement('div'); tile.className='folder';
+    tile.setAttribute('onclick', `openFolder(${JSON.stringify(String(s.id))})`);
+    tile.innerHTML=`${folderSVG()}
+      <div class="fname">${esc(s.name)}</div>
+      <div class="fmeta">${s.role?esc(s.role.split('(')[0].trim()):'Applicant'} · ${n} file${n===1?'':'s'}</div>`;
+    grid.appendChild(tile);
   });
 }
 function esc(s){return (s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+
+function openFolder(id){
+  const s=SUBS_CACHE[id]; if(!s) return;
+  const date=new Date(s.submittedAt).toLocaleString();
+  const chips=(s.files||[]).map((f,i)=>`<span class="doc-chip" onclick='downloadFile(${JSON.stringify(String(s.id))},${i})'>
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M12 4v12m0 0-5-5m5 5 5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    ${esc(f.name)}</span>`).join('') || '<span class="meta">No files attached.</span>';
+  $('folderBody').innerHTML=`
+    <div class="fb-head">
+      <div class="fb-ic">${folderSVG()}</div>
+      <div>
+        <div class="who" style="font-size:1.4rem">${esc(s.name)}</div>
+        <div class="meta">Submitted ${date}</div>
+        ${s.role?`<span class="role-pill">${esc(s.role)}</span>`:''}
+      </div>
+    </div>
+    <div class="sub-contact" style="margin:16px 0">
+      <span>✉ <a href="mailto:${esc(s.email)}">${esc(s.email)}</a></span>${s.phone?`<span>☎ ${esc(s.phone)}</span>`:''}
+    </div>
+    <div class="fb-label">Documents</div>
+    <div class="sub-files">${chips}</div>
+    <div class="fb-actions">
+      <button class="del" onclick='delSub(${JSON.stringify(String(s.id))})'>Delete submission</button>
+    </div>`;
+  $('folderModal').classList.add('show');
+}
+function closeFolder(){ $('folderModal').classList.remove('show'); }
 
 async function downloadFile(id,idx){
   const rec=SUBS_CACHE[id]; if(!rec){ toast('Reload the list and try again'); return; }
@@ -1229,7 +1281,7 @@ async function delSub(id){
       if(rec&&rec.files){ for(const f of rec.files){ if(f.key){ try{ await SS.del(f.key); }catch(e){} } } }
       await SS.del('submission:'+id);
     }
-    toast('Submission deleted'); loadSubmissions();
+    toast('Submission deleted'); closeFolder(); loadSubmissions();
   }catch(e){ console.error(e); toast('Could not delete'); }
 }
 
