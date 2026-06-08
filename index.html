@@ -1450,6 +1450,28 @@ function openFolder(id){
   const row=(label,v)=> v ? `<div class="fb-row"><span class="fb-k">${label}</span><span class="fb-v">${esc(String(v))}</span></div>` : '';
   const list=(label,arr)=> (arr&&arr.length) ? `<div class="fb-row"><span class="fb-k">${label}</span><span class="fb-v">${arr.map(esc).join(', ')}</span></div>` : '';
   const ref=r=> (r&&(r.name||r.contact)) ? `${esc(r.name||'')}${r.relationship?' ('+esc(r.relationship)+')':''}${r.contact?' — '+esc(r.contact):''}` : '';
+  const sec=(label,body)=> body && body.trim() ? `<div class="fb-label">${label}</div>${body}` : '';
+
+  const personal = row('Date of birth',a.dob)+row('Gender',a.gender)+row('Address',a.address)
+    +(a.linkedin?`<div class="fb-row"><span class="fb-k">LinkedIn</span><span class="fb-v"><a href="${esc(a.linkedin)}" target="_blank" rel="noopener">${esc(a.linkedin)}</a></span></div>`:'')
+    +row('Heard about us',a.heardFrom);
+  const quals = row('Highest qualification',a.qualification)+row('Experience',a.experience)+row('License #',a.license)
+    +row('License expiry',a.licenseExpiry)+row('Issuing state/country',a.issuer)+row('NPI',a.npi)+list('Specialties',a.specialties);
+  const work = row('Employer',a.employer)+row('Job title',a.jobTitle)
+    +((a.workStart||a.workEnd)?row('Dates',[a.workStart,a.workEnd].filter(Boolean).join(' → ')):'')
+    +row('Responsibilities',a.duties)+row('Reason for leaving',a.reasonLeaving)+row('Contact employer?',a.contactEmployer);
+  const avail = row('Employment type',a.employmentType)+row('Available from',a.availableStart)
+    +(a.desiredRate?row('Desired rate','$'+a.desiredRate+'/hr'):'')+row('Relocate?',a.relocate)
+    +list('Shifts',a.shifts)+list('Facility types',a.facilities);
+  const refs = (ref(a.reference1)?`<div class="fb-row"><span class="fb-k">Reference 1</span><span class="fb-v">${ref(a.reference1)}</span></div>`:'')
+    +(ref(a.reference2)?`<div class="fb-row"><span class="fb-k">Reference 2</span><span class="fb-v">${ref(a.reference2)}</span></div>`:'');
+  const additional = row('Statement',a.statement)+row('Languages',a.languages)+row('Authorized to work?',a.authorized)
+    +row('Criminal record?',a.criminal)+row('COVID-19 status',a.covid);
+
+  const detail = sec('Personal',personal)+sec('Qualifications',quals)+sec('Work History',work)
+    +sec('Availability',avail)+sec('References',refs)+sec('Additional',additional);
+  const legacyNote = detail.trim() ? '' :
+    '<div class="fb-row"><span class="fb-v meta">This applicant submitted before the full application form was added, so only their contact details and document(s) are on file.</span></div>';
 
   $('folderBody').innerHTML=`
     <div class="fb-head">
@@ -1463,41 +1485,11 @@ function openFolder(id){
     <div class="sub-contact" style="margin:16px 0">
       <span>✉ <a href="mailto:${esc(s.email)}">${esc(s.email)}</a></span>${s.phone?`<span>☎ ${esc(s.phone)}</span>`:''}
     </div>
-
-    <div class="fb-label">Personal</div>
-    ${row('Date of birth',a.dob)}${row('Gender',a.gender)}${row('Address',a.address)}
-    ${a.linkedin?`<div class="fb-row"><span class="fb-k">LinkedIn</span><span class="fb-v"><a href="${esc(a.linkedin)}" target="_blank">${esc(a.linkedin)}</a></span></div>`:''}
-    ${row('Heard about us',a.heardFrom)}
-
-    <div class="fb-label">Qualifications</div>
-    ${row('Highest qualification',a.qualification)}${row('Experience',a.experience)}${row('License #',a.license)}
-    ${row('License expiry',a.licenseExpiry)}${row('Issuing state/country',a.issuer)}${row('NPI',a.npi)}
-    ${list('Specialties',a.specialties)}
-
-    <div class="fb-label">Work History</div>
-    ${row('Employer',a.employer)}${row('Job title',a.jobTitle)}
-    ${(a.workStart||a.workEnd)?row('Dates',[a.workStart,a.workEnd].filter(Boolean).join(' → ')):''}
-    ${row('Responsibilities',a.duties)}${row('Reason for leaving',a.reasonLeaving)}${row('Contact employer?',a.contactEmployer)}
-
-    <div class="fb-label">Availability</div>
-    ${row('Employment type',a.employmentType)}${row('Available from',a.availableStart)}
-    ${a.desiredRate?row('Desired rate','$'+a.desiredRate+'/hr'):''}${row('Relocate?',a.relocate)}
-    ${list('Shifts',a.shifts)}${list('Facility types',a.facilities)}
-
-    <div class="fb-label">References</div>
-    ${ref(a.reference1)?`<div class="fb-row"><span class="fb-k">Reference 1</span><span class="fb-v">${ref(a.reference1)}</span></div>`:''}
-    ${ref(a.reference2)?`<div class="fb-row"><span class="fb-k">Reference 2</span><span class="fb-v">${ref(a.reference2)}</span></div>`:''}
-    ${(!ref(a.reference1)&&!ref(a.reference2))?'<div class="fb-row"><span class="fb-v meta">None provided</span></div>':''}
-
-    <div class="fb-label">Additional</div>
-    ${row('Statement',a.statement)}${row('Languages',a.languages)}${row('Authorized to work?',a.authorized)}
-    ${row('Criminal record?',a.criminal)}${row('COVID-19 status',a.covid)}
-
+    ${detail}${legacyNote}
     <div class="fb-label">CV / Resume</div>
     <div class="sub-files">${resumeChips}</div>
     <div class="fb-label" style="margin-top:14px">Certifications / License</div>
     <div class="sub-files">${certChips}</div>
-
     <div class="fb-actions">
       <a class="doc-chip" href="mailto:${esc(s.email)}?subject=Your%20Bee%20Connect%20application">Email applicant</a>
       <button class="del" onclick='delSub(${JSON.stringify(String(s.id))})'>Delete submission</button>
@@ -1511,14 +1503,15 @@ async function downloadFile(id,idx){
   const f=rec.files[idx]; if(!f){ return; }
   try{
     if(USE_SUPABASE){
-      const { data, error } = await sb.storage.from(SB_BUCKET).createSignedUrl(f.path, 120);
+      const { data, error } = await sb.storage.from(SB_BUCKET).createSignedUrl(f.path, 120, { download: f.name||true });
       if(error) throw error;
-      window.open(data.signedUrl,'_blank');
+      const a=document.createElement('a'); a.href=data.signedUrl; a.download=f.name||'document';
+      a.rel='noopener'; document.body.appendChild(a); a.click(); a.remove();
     }else{
       let href=f.data;
       if(!href && f.key){ const fd=await SS.get(f.key); href=fd&&fd.value; }
       if(!href){ toast('File data unavailable'); return; }
-      const a=document.createElement('a'); a.href=href; a.download=f.name||'document'; a.click();
+      const a=document.createElement('a'); a.href=href; a.download=f.name||'document'; document.body.appendChild(a); a.click(); a.remove();
     }
   }catch(e){ console.error(e); toast('Could not open file'); }
 }
