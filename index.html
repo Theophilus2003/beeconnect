@@ -211,14 +211,35 @@
   .panel.active{display:block}
   @keyframes fade{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
 
-  .upload-card{background:#fff;color:var(--ink);border-radius:24px;padding:38px;max-width:760px;margin:0 auto;box-shadow:var(--shadow)}
-  .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:20px}
+  .upload-card{background:#fff;color:var(--ink);border-radius:24px;padding:38px;max-width:780px;margin:0 auto;box-shadow:var(--shadow)}
+  .app-head{text-align:center;margin-bottom:10px}
+  .app-logo{height:46px;width:auto;margin:0 auto 16px;display:block}
+  .app-head h3{font-size:1.9rem}
+  .app-head h3 em{font-style:italic;color:var(--honey-deep)}
+  .app-head p{color:var(--muted);font-size:.96rem;margin:10px auto 6px;max-width:52ch}
+  .req{color:#c0392b;font-weight:700}
+  .app-sec{border-top:2px solid var(--honey-soft);padding-top:22px;margin-top:26px}
+  .app-sec h4{font-family:'Fraunces';font-size:1.3rem;color:var(--honey-deep);display:flex;align-items:center;gap:12px;margin-bottom:18px}
+  .app-sec h4 .sn{display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;flex:none;
+    background:var(--ink);color:var(--honey);border-radius:50%;font-family:'Hanken Grotesk';font-weight:800;font-size:.95rem}
+  .opt-group{display:flex;flex-wrap:wrap;gap:10px;align-items:stretch}
+  .opt{display:inline-flex;align-items:center;gap:9px;padding:11px 16px;border:1.5px solid var(--line);border-radius:10px;
+    cursor:pointer;font-size:.92rem;font-weight:600;background:var(--cream);color:var(--ink-soft);transition:.15s;
+    line-height:1.25;white-space:nowrap;flex:0 0 auto;width:auto}
+  .opt:hover{border-color:var(--honey);background:#fff}
+  .opt input{accent-color:var(--honey-deep);width:17px;height:17px;flex:none;margin:0;cursor:pointer}
+  .opt.full,.opt.consent{flex-basis:100%;width:100%;white-space:normal;align-items:flex-start}
+  .opt.consent{background:#fff8e9;border-color:var(--honey-soft);padding:14px 16px;font-weight:500}
+  .opt.consent input{margin-top:2px}
+  .app-foot{text-align:center;color:var(--muted);font-size:.85rem;margin-top:14px}
+  .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:0}
   .form-grid .full{grid-column:1/-1}
   .fld{display:flex;flex-direction:column;gap:7px}
   .fld label{font-weight:700;font-size:.88rem;color:var(--ink-soft)}
-  .fld input,.fld select{padding:13px 15px;border:1.5px solid var(--line);border-radius:12px;font-family:inherit;
-    font-size:1rem;background:var(--cream);color:var(--ink);transition:.2s}
-  .fld input:focus,.fld select:focus{outline:none;border-color:var(--honey);background:#fff;box-shadow:0 0 0 4px rgba(230,168,23,.16)}
+  .fld input:not([type=radio]):not([type=checkbox]),.fld select,.fld textarea{padding:13px 15px;border:1.5px solid var(--line);border-radius:12px;font-family:inherit;
+    font-size:1rem;background:var(--cream);color:var(--ink);transition:.2s;width:100%}
+  .fld textarea{resize:vertical;min-height:80px}
+  .fld input:not([type=radio]):not([type=checkbox]):focus,.fld select:focus,.fld textarea:focus{outline:none;border-color:var(--honey);background:#fff;box-shadow:0 0 0 4px rgba(230,168,23,.16)}
   .dropzone{grid-column:1/-1;border:2.5px dashed var(--line);border-radius:18px;padding:38px 24px;text-align:center;
     cursor:pointer;transition:.25s;background:var(--cream)}
   .dropzone:hover,.dropzone.drag{border-color:var(--honey);background:#fff}
@@ -303,7 +324,10 @@
   .fb-head{display:flex;gap:16px;align-items:center}
   .fb-ic svg{width:60px;height:52px}
   .fb-label{font-weight:700;color:var(--ink-soft);font-size:.85rem;text-transform:uppercase;letter-spacing:.05em;margin:6px 0 10px}
-  .fb-actions{margin-top:22px;border-top:1px solid var(--line);padding-top:18px}
+  .fb-actions{margin-top:22px;border-top:1px solid var(--line);padding-top:18px;display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+  .fb-row{display:flex;gap:12px;padding:6px 0;border-bottom:1px solid var(--cream-2);font-size:.93rem}
+  .fb-row .fb-k{flex:none;width:150px;color:var(--muted);font-weight:600}
+  .fb-row .fb-v{color:var(--ink);white-space:pre-wrap;word-break:break-word}
   .dash-tabs{display:flex;gap:8px;flex-wrap:wrap}
   .dtab{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);color:#cabfad;
     font-family:'Fraunces';font-weight:600;font-size:1.15rem;cursor:pointer;padding:8px 18px;border-radius:12px;transition:.2s}
@@ -587,51 +611,191 @@
     <!-- CANDIDATE UPLOAD -->
     <div class="panel active" id="panelUpload">
       <div class="upload-card">
-        <div class="form-grid">
-          <div class="fld"><label>Full name *</label><input id="f_name" placeholder="Jane Doe"></div>
-          <div class="fld"><label>Email *</label><input id="f_email" type="email" placeholder="jane@email.com"></div>
-          <div class="fld"><label>Phone</label>
-            <div class="phone-wrap">
-              <button type="button" class="cc-btn" id="ccBtn" aria-label="Select country code">
-                <span class="cc-flag" id="ccFlag">🇳🇬</span>
-                <span class="cc-dial" id="ccDial">+234</span>
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="m6 9 6 6 6-6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
-              </button>
-              <input id="f_phone" type="tel" inputmode="tel" placeholder="801 234 5678">
-              <div class="cc-list" id="ccList">
-                <input class="cc-search" id="ccSearch" placeholder="Search country or code…" autocomplete="off">
-                <div class="cc-items" id="ccItems"></div>
+        <div class="app-head">
+          <img id="formLogo" class="app-logo" alt="Bee Connect Staffing Agency">
+          <h3>Join Our <em>Talent Network</em></h3>
+          <p>Complete the form below and a member of our recruitment team will be in touch. Every field marked <span class="req">*</span> is required, and your CV must be attached before you can submit.</p>
+        </div>
+
+        <!-- 1. PERSONAL INFORMATION -->
+        <div class="app-sec">
+          <h4><span class="sn">1</span> Personal Information</h4>
+          <div class="form-grid">
+            <div class="fld"><label>First name <span class="req">*</span></label><input id="a_first" placeholder="e.g. Abiodun"></div>
+            <div class="fld"><label>Last name <span class="req">*</span></label><input id="a_last" placeholder="e.g. Ogunfuye"></div>
+            <div class="fld"><label>Email address <span class="req">*</span></label><input id="f_email" type="email" placeholder="name@email.com"></div>
+            <div class="fld"><label>Phone number <span class="req">*</span></label>
+              <div class="phone-wrap">
+                <button type="button" class="cc-btn" id="ccBtn" aria-label="Select country code">
+                  <span class="cc-flag" id="ccFlag">🇳🇬</span><span class="cc-dial" id="ccDial">+234</span>
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="m6 9 6 6 6-6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </button>
+                <input id="f_phone" type="tel" inputmode="tel" placeholder="801 234 5678">
+                <div class="cc-list" id="ccList"><input class="cc-search" id="ccSearch" placeholder="Search country or code…" autocomplete="off"><div class="cc-items" id="ccItems"></div></div>
+              </div>
+            </div>
+            <div class="fld"><label>Date of birth</label><input id="a_dob" type="date"></div>
+            <div class="fld"><label>Gender</label><select id="a_gender"><option value="">— Select —</option><option>Female</option><option>Male</option><option>Non-binary</option><option>Prefer not to say</option></select></div>
+            <div class="fld full"><label>Home address <span class="req">*</span></label><input id="a_address" placeholder="Street, City, State, ZIP"></div>
+            <div class="fld"><label>LinkedIn profile</label><input id="a_linkedin" placeholder="https://linkedin.com/in/…"></div>
+            <div class="fld"><label>How did you hear about us?</label><select id="a_hear"><option value="">— Select —</option><option>Google / search</option><option>Social media</option><option>Referral</option><option>Job board</option><option>Career fair</option><option>Other</option></select></div>
+          </div>
+        </div>
+
+        <!-- 2. QUALIFICATIONS -->
+        <div class="app-sec">
+          <h4><span class="sn">2</span> Professional Qualifications</h4>
+          <div class="form-grid">
+            <div class="fld"><label>Highest qualification <span class="req">*</span></label><select id="a_qual"><option value="">— Select —</option><option>High school / GED</option><option>Certificate / Diploma</option><option>Associate degree</option><option>Bachelor's degree</option><option>Master's degree</option><option>Doctorate</option></select></div>
+            <div class="fld"><label>Years of experience <span class="req">*</span></label><select id="a_exp"><option value="">— Select —</option><option>Less than 1 year</option><option>1–2 years</option><option>3–5 years</option><option>6–10 years</option><option>10+ years</option></select></div>
+            <div class="fld"><label>Professional license / certification #</label><input id="a_license" placeholder="e.g. RN-123456"></div>
+            <div class="fld"><label>License expiry date</label><input id="a_licexp" type="date"></div>
+            <div class="fld"><label>Issuing state / country</label><input id="a_issuer" placeholder="e.g. Texas, United States"></div>
+            <div class="fld"><label>NPI number (if applicable)</label><input id="a_npi" placeholder="10-digit NPI"></div>
+            <div class="fld full"><label>Primary role / position sought <span class="req">*</span></label>
+              <div class="opt-group" id="a_primary">
+                <label class="opt"><input type="radio" name="a_primary" value="Registered Nurse (RN)"> Registered Nurse (RN)</label>
+                <label class="opt"><input type="radio" name="a_primary" value="LPN / LVN"> LPN / LVN</label>
+                <label class="opt"><input type="radio" name="a_primary" value="CNA"> CNA</label>
+                <label class="opt"><input type="radio" name="a_primary" value="Travel Nurse"> Travel Nurse</label>
+                <label class="opt"><input type="radio" name="a_primary" value="Allied Health"> Allied Health</label>
+                <label class="opt"><input type="radio" name="a_primary" value="Social Worker"> Social Worker</label>
+                <label class="opt"><input type="radio" name="a_primary" value="Physical Therapist"> Physical Therapist</label>
+                <label class="opt"><input type="radio" name="a_primary" value="Other"> Other</label>
+              </div>
+            </div>
+            <div class="fld full"><label>Clinical specialties (select all that apply)</label>
+              <div class="opt-group" data-group="a_spec">
+                <label class="opt"><input type="checkbox" value="ICU / Critical Care"> ICU / Critical Care</label>
+                <label class="opt"><input type="checkbox" value="ER / Emergency"> ER / Emergency</label>
+                <label class="opt"><input type="checkbox" value="Med-Surg"> Med-Surg</label>
+                <label class="opt"><input type="checkbox" value="Pediatrics"> Pediatrics</label>
+                <label class="opt"><input type="checkbox" value="Oncology"> Oncology</label>
+                <label class="opt"><input type="checkbox" value="Geriatrics"> Geriatrics</label>
+                <label class="opt"><input type="checkbox" value="L&D / Obstetrics"> L&D / Obstetrics</label>
+                <label class="opt"><input type="checkbox" value="Psychiatry"> Psychiatry</label>
+                <label class="opt"><input type="checkbox" value="OR / Periop"> OR / Periop</label>
+                <label class="opt"><input type="checkbox" value="Long-Term Care"> Long-Term Care</label>
               </div>
             </div>
           </div>
-          <div class="fld"><label>Role / specialty</label>
-            <select id="f_role">
-              <option value="">Select a role…</option>
-              <option>Certified Nursing Assistant (CNA)</option>
-              <option>Geriatric Nursing Assistant (GNA)</option>
-              <option>Registered Nurse (RN)</option>
-              <option>Licensed Practical Nurse (LPN/LVN)</option>
-              <option>Certified Medication Technician (CMT)</option>
-              <option>Certified Medical Assistant (CMA)</option>
-              <option>Home Health Aide (HHA)</option>
-              <option>Caregiver / Personal Care</option>
-              <option>Other healthcare role</option>
-            </select>
-          </div>
-
-          <div class="dropzone" id="dz">
-            <div class="dz-ic"><svg width="26" height="26" viewBox="0 0 24 24" fill="none"><path d="M12 16V4m0 0L7 9m5-5 5 5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M4 16v3a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-3" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg></div>
-            <div><b>Click to upload</b> or drag & drop</div>
-            <small>Resume, certifications, licenses — PDF, DOC, DOCX, JPG, PNG. Photos are optimized automatically.</small>
-            <input type="file" id="fileInput" multiple accept=".pdf,.doc,.docx,.jpg,.jpeg,.png" style="display:none">
-          </div>
-          <div class="file-list" id="fileList"></div>
-
-          <div class="form-msg" id="formMsg"></div>
-          <button class="btn btn-primary full" style="justify-content:center" onclick="submitDocs()" id="submitBtn">
-            Submit Documents
-          </button>
         </div>
+
+        <!-- 3. WORK HISTORY -->
+        <div class="app-sec">
+          <h4><span class="sn">3</span> Work History</h4>
+          <div class="form-grid">
+            <div class="fld"><label>Most recent employer</label><input id="a_employer" placeholder="Hospital or facility name"></div>
+            <div class="fld"><label>Job title</label><input id="a_jobtitle" placeholder="e.g. Staff RN"></div>
+            <div class="fld"><label>Start date</label><input id="a_wstart" type="date"></div>
+            <div class="fld"><label>End date</label><input id="a_wend" type="date"></div>
+            <div class="fld full"><label>Key responsibilities</label><textarea id="a_duties" rows="3" placeholder="Briefly describe your duties and achievements…"></textarea></div>
+            <div class="fld"><label>Reason for leaving</label><input id="a_reason" placeholder="e.g. Seeking growth"></div>
+            <div class="fld"><label>May we contact this employer?</label>
+              <div class="opt-group">
+                <label class="opt"><input type="radio" name="a_contactemp" value="Yes"> Yes</label>
+                <label class="opt"><input type="radio" name="a_contactemp" value="No"> No</label>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 4. AVAILABILITY -->
+        <div class="app-sec">
+          <h4><span class="sn">4</span> Availability &amp; Preferences</h4>
+          <div class="form-grid">
+            <div class="fld"><label>Employment type <span class="req">*</span></label><select id="a_emptype"><option value="">— Select —</option><option>Full-time</option><option>Part-time</option><option>Per diem / PRN</option><option>Travel</option><option>Contract</option></select></div>
+            <div class="fld"><label>Available start date</label><input id="a_avail" type="date"></div>
+            <div class="fld"><label>Desired hourly rate (USD)</label><input id="a_rate" type="number" placeholder="e.g. 45"></div>
+            <div class="fld"><label>Willing to relocate?</label>
+              <div class="opt-group">
+                <label class="opt"><input type="radio" name="a_relocate" value="Yes"> Yes</label>
+                <label class="opt"><input type="radio" name="a_relocate" value="No"> No</label>
+                <label class="opt"><input type="radio" name="a_relocate" value="Maybe"> Maybe</label>
+              </div>
+            </div>
+            <div class="fld full"><label>Preferred shift availability</label>
+              <div class="opt-group" data-group="a_shift">
+                <label class="opt"><input type="checkbox" value="Day"> Day</label>
+                <label class="opt"><input type="checkbox" value="Evening"> Evening</label>
+                <label class="opt"><input type="checkbox" value="Night"> Night</label>
+                <label class="opt"><input type="checkbox" value="Weekends"> Weekends</label>
+                <label class="opt"><input type="checkbox" value="Holidays"> Holidays</label>
+                <label class="opt"><input type="checkbox" value="Flexible"> Flexible</label>
+                <label class="opt"><input type="checkbox" value="On-Call"> On-Call</label>
+                <label class="opt"><input type="checkbox" value="Travel"> Travel</label>
+              </div>
+            </div>
+            <div class="fld full"><label>Preferred facility type</label>
+              <div class="opt-group" data-group="a_facility">
+                <label class="opt"><input type="checkbox" value="Hospital"> Hospital</label>
+                <label class="opt"><input type="checkbox" value="Nursing Home / LTC"> Nursing Home / LTC</label>
+                <label class="opt"><input type="checkbox" value="Clinic / Outpatient"> Clinic / Outpatient</label>
+                <label class="opt"><input type="checkbox" value="Home Health"> Home Health</label>
+                <label class="opt"><input type="checkbox" value="Rehabilitation"> Rehabilitation</label>
+                <label class="opt"><input type="checkbox" value="Schools"> Schools</label>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 5. DOCUMENTS & REFERENCES -->
+        <div class="app-sec">
+          <h4><span class="sn">5</span> Documents &amp; References</h4>
+          <div class="form-grid">
+            <div class="fld full"><label>Upload CV / Resume <span class="req">*</span></label>
+              <div class="dropzone" id="dzResume">
+                <div class="dz-ic"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M14 3v5h5" stroke="currentColor" stroke-width="2"/><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z" stroke="currentColor" stroke-width="2"/></svg></div>
+                <div><b>Click to upload</b> or drag &amp; drop</div>
+                <small>PDF, DOC, DOCX — one file</small>
+                <input type="file" id="fileResume" accept=".pdf,.doc,.docx" style="display:none">
+              </div>
+              <div class="file-list" id="listResume"></div>
+            </div>
+            <div class="fld full"><label>Upload certifications / license</label>
+              <div class="dropzone" id="dzCerts">
+                <div class="dz-ic"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 16V4m0 0L7 9m5-5 5 5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M4 16v3a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-3" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg></div>
+                <div><b>Click to upload</b> or drag &amp; drop</div>
+                <small>PDF or image — multiple files OK. Photos optimized automatically.</small>
+                <input type="file" id="fileCerts" multiple accept=".pdf,.jpg,.jpeg,.png" style="display:none">
+              </div>
+              <div class="file-list" id="listCerts"></div>
+            </div>
+            <div class="fld"><label>Reference 1 — full name</label><input id="a_ref1name" placeholder="Reference name"></div>
+            <div class="fld"><label>Reference 1 — relationship</label><input id="a_ref1rel" placeholder="e.g. Supervisor"></div>
+            <div class="fld full"><label>Reference 1 — phone / email</label><input id="a_ref1contact" placeholder="Contact info"></div>
+            <div class="fld"><label>Reference 2 — full name</label><input id="a_ref2name" placeholder="Reference name"></div>
+            <div class="fld"><label>Reference 2 — relationship</label><input id="a_ref2rel" placeholder="e.g. Charge Nurse"></div>
+            <div class="fld full"><label>Reference 2 — phone / email</label><input id="a_ref2contact" placeholder="Contact info"></div>
+          </div>
+        </div>
+
+        <!-- 6. ADDITIONAL -->
+        <div class="app-sec">
+          <h4><span class="sn">6</span> Additional Information</h4>
+          <div class="form-grid">
+            <div class="fld full"><label>Personal statement / cover note</label><textarea id="a_statement" rows="3" placeholder="Tell us about yourself, your career goals, and why you want to join the Bee Connect network…"></textarea></div>
+            <div class="fld"><label>Languages spoken</label><input id="a_languages" placeholder="e.g. English, Spanish"></div>
+            <div class="fld"><label>Legally authorized to work?</label>
+              <div class="opt-group">
+                <label class="opt"><input type="radio" name="a_authorized" value="Yes"> Yes</label>
+                <label class="opt"><input type="radio" name="a_authorized" value="No"> No</label>
+              </div>
+            </div>
+            <div class="fld"><label>Any criminal record?</label>
+              <div class="opt-group">
+                <label class="opt"><input type="radio" name="a_criminal" value="No"> No</label>
+                <label class="opt"><input type="radio" name="a_criminal" value="Yes (will be discussed)"> Yes (will be discussed)</label>
+              </div>
+            </div>
+            <div class="fld"><label>COVID-19 vaccination status</label><select id="a_covid"><option value="">— Select —</option><option>Fully vaccinated</option><option>Partially vaccinated</option><option>Not vaccinated</option><option>Prefer not to say</option></select></div>
+            <label class="opt full consent"><input type="checkbox" id="a_consent"> <span>I confirm the information above is accurate and I consent to Bee Connect Staffing Agency processing my personal data for recruitment purposes. <span class="req">*</span></span></label>
+          </div>
+        </div>
+
+        <div class="form-msg" id="formMsg"></div>
+        <button class="btn btn-primary full" style="justify-content:center" onclick="submitApplication()" id="submitBtn">Submit Application →</button>
+        <p class="app-foot">Our recruitment team will review your application and contact you within 2–3 business days.</p>
       </div>
     </div>
 
@@ -966,20 +1130,23 @@ const SS = {
 };
 
 const DOC_MAX = 15*1024*1024;     // 15 MB per document (real storage)
-let stagedFiles=[];
+let stagedResume=[], stagedCerts=[];
 
-const dz=$('dz'), fileInput=$('fileInput');
-dz.addEventListener('click',()=>fileInput.click());
-['dragenter','dragover'].forEach(ev=>dz.addEventListener(ev,e=>{e.preventDefault();dz.classList.add('drag');}));
-['dragleave','drop'].forEach(ev=>dz.addEventListener(ev,e=>{e.preventDefault();dz.classList.remove('drag');}));
-dz.addEventListener('drop',e=>addFiles(e.dataTransfer.files));
-fileInput.addEventListener('change',e=>{ addFiles(e.target.files); fileInput.value=''; });
+function wireZone(dzId, inputId, target, single){
+  const dz=$(dzId), inp=$(inputId);
+  dz.addEventListener('click',()=>inp.click());
+  ['dragenter','dragover'].forEach(ev=>dz.addEventListener(ev,e=>{e.preventDefault();dz.classList.add('drag');}));
+  ['dragleave','drop'].forEach(ev=>dz.addEventListener(ev,e=>{e.preventDefault();dz.classList.remove('drag');}));
+  dz.addEventListener('drop',e=>addFiles(e.dataTransfer.files, target, single));
+  inp.addEventListener('change',e=>{ addFiles(e.target.files, target, single); inp.value=''; });
+}
+wireZone('dzResume','fileResume', ()=>stagedResume, true);
+wireZone('dzCerts','fileCerts', ()=>stagedCerts, false);
 
 function fmtSize(b){return b<1024?b+' B':b<1048576?(b/1024).toFixed(0)+' KB':(b/1048576).toFixed(1)+' MB';}
 function fileToDataURL(f){return new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>res(r.result);r.onerror=()=>rej(new Error('read'));r.readAsDataURL(f);});}
 function dataUrlBytes(d){const i=d.indexOf(',');return Math.round((d.length-i-1)*0.75);}
 
-// Resize + re-encode images so even large phone photos fit comfortably.
 function compressImage(file){
   return new Promise((resolve,reject)=>{
     const reader=new FileReader();
@@ -988,10 +1155,7 @@ function compressImage(file){
       img.onload=()=>{
         try{
           const maxDim=1600; let {width,height}=img;
-          if(width>maxDim||height>maxDim){
-            const s=Math.min(maxDim/width,maxDim/height);
-            width=Math.round(width*s); height=Math.round(height*s);
-          }
+          if(width>maxDim||height>maxDim){ const s=Math.min(maxDim/width,maxDim/height); width=Math.round(width*s); height=Math.round(height*s); }
           const c=document.createElement('canvas'); c.width=width; c.height=height;
           const ctx=c.getContext('2d'); ctx.fillStyle='#fff'; ctx.fillRect(0,0,width,height);
           ctx.drawImage(img,0,0,width,height);
@@ -1006,38 +1170,38 @@ function compressImage(file){
   });
 }
 
-async function addFiles(list){
+async function addFiles(list, target, single){
   msg('','');
+  const arr=target();
   for(const f of list){
-    if(stagedFiles.some(s=>s.name===f.name && s.origSize===f.size)) continue;
+    if(single && arr.length) arr.length=0;          // resume keeps only the latest
+    if(arr.some(s=>s.name===f.name && s.origSize===f.size)) continue;
     try{
-      let data, type=f.type, name=f.name;
-      if((f.type||'').startsWith('image/')){
-        data=await compressImage(f);            // shrinks big photos automatically
-        type='image/jpeg';
-      }else{
-        if(f.size>DOC_MAX){ toast(`"${f.name}" is too large — please keep documents under 15 MB`); continue; }
+      let data, type=f.type;
+      if((f.type||'').startsWith('image/')){ data=await compressImage(f); type='image/jpeg'; }
+      else{
+        if(f.size>DOC_MAX){ toast(`"${f.name}" is too large — keep documents under 15 MB`); continue; }
         data=await fileToDataURL(f);
       }
-      stagedFiles.push({name, type, origSize:f.size, size:dataUrlBytes(data), data});
-    }catch(err){
-      console.error('file error',err);
-      toast(`Couldn't read "${f.name}". Try a different file.`);
-    }
+      arr.push({name:f.name, type, origSize:f.size, size:dataUrlBytes(data), data});
+      if(single) break;
+    }catch(err){ console.error('file error',err); toast(`Couldn't read "${f.name}".`); }
   }
-  renderFileList();
+  renderZone();
 }
-function renderFileList(){
-  const el=$('fileList'); el.innerHTML='';
-  stagedFiles.forEach((f,i)=>{
-    const row=document.createElement('div'); row.className='file-row';
-    row.innerHTML=`<span class="fi"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M14 3v5h5" stroke="currentColor" stroke-width="2"/><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z" stroke="currentColor" stroke-width="2"/></svg></span>
-      <span class="nm">${esc(f.name)}</span><span class="sz">${fmtSize(f.size)}</span>
-      <button class="rm" onclick="removeFile(${i})">×</button>`;
-    el.appendChild(row);
+function renderZone(){
+  [['listResume',stagedResume],['listCerts',stagedCerts]].forEach(([id,arr])=>{
+    const el=$(id); if(!el) return; el.innerHTML='';
+    arr.forEach((f,i)=>{
+      const row=document.createElement('div'); row.className='file-row';
+      row.innerHTML=`<span class="fi"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M14 3v5h5" stroke="currentColor" stroke-width="2"/><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z" stroke="currentColor" stroke-width="2"/></svg></span>
+        <span class="nm">${esc(f.name)}</span><span class="sz">${fmtSize(f.size)}</span>
+        <button class="rm" onclick="removeFile('${id}',${i})">×</button>`;
+      el.appendChild(row);
+    });
   });
 }
-function removeFile(i){ stagedFiles.splice(i,1); renderFileList(); }
+function removeFile(id,i){ (id==='listResume'?stagedResume:stagedCerts).splice(i,1); renderZone(); }
 
 function msg(type,text){ const m=$('formMsg'); m.className='form-msg'+(type?' '+type:''); m.textContent=text||''; if(!text) m.classList.remove('ok','err'); }
 
@@ -1080,49 +1244,95 @@ ccSearch.addEventListener('keydown',e=>{
 document.addEventListener('click',e=>{ if(!e.target.closest('.phone-wrap')) closeCC(); });
 function fullPhone(){ const n=$('f_phone').value.trim(); return n?('+'+selectedDial+' '+n):''; }
 
-async function submitDocs(){
-  const name=$('f_name').value.trim(), email=$('f_email').value.trim();
-  if(!name||!email){ msg('err','Please enter your name and email.'); return; }
-  if(!/^[^@]+@[^@]+\.[^@]+$/.test(email)){ msg('err','Please enter a valid email address.'); return; }
-  if(stagedFiles.length===0){ msg('err','Please attach at least one document.'); return; }
+async function submitApplication(){
+  msg('','');
+  const val=id=>($(id)?$(id).value.trim():'');
+  const radio=name=>{const el=document.querySelector(`input[name="${name}"]:checked`);return el?el.value:'';};
+  const checks=group=>Array.from(document.querySelectorAll(`[data-group="${group}"] input:checked`)).map(i=>i.value);
 
-  const btn=$('submitBtn'); btn.textContent='Submitting…'; btn.disabled=true; msg('','');
+  const first=val('a_first'), last=val('a_last'), email=val('f_email');
+  const fullName=(first+' '+last).trim();
+  const primary=radio('a_primary');
+
+  // required-field validation
+  const missing=[];
+  if(!first) missing.push('First name');
+  if(!last) missing.push('Last name');
+  if(!email) missing.push('Email');
+  if(!val('f_phone')) missing.push('Phone number');
+  if(!val('a_address')) missing.push('Home address');
+  if(!val('a_qual')) missing.push('Highest qualification');
+  if(!val('a_exp')) missing.push('Years of experience');
+  if(!primary) missing.push('Primary role');
+  if(!val('a_emptype')) missing.push('Employment type');
+  if(stagedResume.length===0) missing.push('CV / Resume');
+  if(!$('a_consent').checked) missing.push('Consent');
+  if(missing.length){ msg('err','Please complete: '+missing.join(', ')+'.'); $('panelUpload').scrollIntoView({behavior:'smooth'}); return; }
+  if(!/^[^@]+@[^@]+\.[^@]+$/.test(email)){ msg('err','Please enter a valid email address.'); return; }
+
+  const application={
+    firstName:first, lastName:last, dob:val('a_dob'), gender:val('a_gender'),
+    address:val('a_address'), linkedin:val('a_linkedin'), heardFrom:val('a_hear'),
+    qualification:val('a_qual'), experience:val('a_exp'), license:val('a_license'),
+    licenseExpiry:val('a_licexp'), issuer:val('a_issuer'), npi:val('a_npi'),
+    primaryRole:primary, specialties:checks('a_spec'),
+    employer:val('a_employer'), jobTitle:val('a_jobtitle'), workStart:val('a_wstart'),
+    workEnd:val('a_wend'), duties:val('a_duties'), reasonLeaving:val('a_reason'),
+    contactEmployer:radio('a_contactemp'),
+    employmentType:val('a_emptype'), availableStart:val('a_avail'), desiredRate:val('a_rate'),
+    relocate:radio('a_relocate'), shifts:checks('a_shift'), facilities:checks('a_facility'),
+    reference1:{name:val('a_ref1name'),relationship:val('a_ref1rel'),contact:val('a_ref1contact')},
+    reference2:{name:val('a_ref2name'),relationship:val('a_ref2rel'),contact:val('a_ref2contact')},
+    statement:val('a_statement'), languages:val('a_languages'),
+    authorized:radio('a_authorized'), criminal:radio('a_criminal'), covid:val('a_covid'),
+    consent:true
+  };
+
+  const allFiles=[ ...stagedResume.map(f=>({...f,category:'Resume'})), ...stagedCerts.map(f=>({...f,category:'Certification'})) ];
+
+  const btn=$('submitBtn'); btn.textContent='Submitting…'; btn.disabled=true;
   try{
     if(USE_SUPABASE){
-      const subId = (crypto.randomUUID ? crypto.randomUUID() : Date.now()+''+Math.floor(Math.random()*1e6));
+      const subId=(crypto.randomUUID?crypto.randomUUID():Date.now()+''+Math.floor(Math.random()*1e6));
       const fileRefs=[];
-      for(let i=0;i<stagedFiles.length;i++){
-        const f=stagedFiles[i];
-        const safe=f.name.replace(/[^a-zA-Z0-9._-]/g,'_');
+      for(let i=0;i<allFiles.length;i++){
+        const f=allFiles[i]; const safe=f.name.replace(/[^a-zA-Z0-9._-]/g,'_');
         const path=`${subId}/${i}-${safe}`;
         const { error:upErr } = await sb.storage.from(SB_BUCKET).upload(path, dataURLtoBlob(f.data), {contentType:f.type, upsert:false});
         if(upErr) throw upErr;
-        fileRefs.push({name:f.name, size:f.size, type:f.type, path});
+        fileRefs.push({name:f.name, size:f.size, type:f.type, path, category:f.category});
       }
       const { error:insErr } = await sb.from(SB_TABLE).insert({
-        name, email, phone:fullPhone(), role:$('f_role').value, files:fileRefs
+        name:fullName, email, phone:fullPhone(), role:primary, files:fileRefs, application
       });
       if(insErr) throw insErr;
-    } else {
-      // demo mode (in-browser storage)
+    }else{
       const id=Date.now()+''+Math.floor(Math.random()*9999);
       const fileRefs=[];
-      for(let i=0;i<stagedFiles.length;i++){
-        const f=stagedFiles[i]; const fk='subfiledata:'+id+':'+i;
+      for(let i=0;i<allFiles.length;i++){
+        const f=allFiles[i]; const fk='subfiledata:'+id+':'+i;
         await SS.set(fk, f.data);
-        fileRefs.push({name:f.name, size:f.size, type:f.type, key:fk});
+        fileRefs.push({name:f.name, size:f.size, type:f.type, key:fk, category:f.category});
       }
-      await SS.set('submission:'+id, JSON.stringify({ id, name, email,
-        phone:fullPhone(), role:$('f_role').value, submittedAt:new Date().toISOString(), files:fileRefs }));
+      await SS.set('submission:'+id, JSON.stringify({ id, name:fullName, email,
+        phone:fullPhone(), role:primary, submittedAt:new Date().toISOString(), files:fileRefs, application }));
     }
-    msg('ok','✓ Submitted! Our team will review your documents and reach out soon.');
-    toast('Documents submitted successfully 🐝');
-    stagedFiles=[]; renderFileList();
-    ['f_name','f_email','f_phone'].forEach(i=>$(i).value=''); $('f_role').value='';
+    msg('ok','✓ Application submitted! Our recruitment team will review it and contact you within 2–3 business days.');
+    toast('Application submitted successfully 🐝');
+    resetApplicationForm();
   }catch(err){
     console.error('submit error',err);
-    msg('err','Sorry, we couldn\'t save your submission. Please try again, or contact us directly.');
-  }finally{ btn.textContent='Submit Documents'; btn.disabled=false; }
+    msg('err','Sorry, we couldn\'t save your application. Please try again, or contact us directly.');
+  }finally{ btn.textContent='Submit Application →'; btn.disabled=false; }
+}
+
+function resetApplicationForm(){
+  ['a_first','a_last','f_email','f_phone','a_dob','a_gender','a_address','a_linkedin','a_hear','a_qual','a_exp',
+   'a_license','a_licexp','a_issuer','a_npi','a_employer','a_jobtitle','a_wstart','a_wend','a_duties','a_reason',
+   'a_emptype','a_avail','a_rate','a_ref1name','a_ref1rel','a_ref1contact','a_ref2name','a_ref2rel','a_ref2contact',
+   'a_statement','a_languages','a_covid'].forEach(i=>{ if($(i))$(i).value=''; });
+  document.querySelectorAll('#panelUpload input[type="radio"],#panelUpload input[type="checkbox"]').forEach(i=>i.checked=false);
+  stagedResume=[]; stagedCerts=[]; renderZone();
 }
 
 /* ============ COMPANY PORTAL (ADMIN LOGIN) ============
@@ -1175,7 +1385,7 @@ async function loadSubmissions(){
       const { data, error } = await sb.from(SB_TABLE).select('*');
       if(error) throw error;
       subs=(data||[]).map(r=>({ id:r.id, name:r.name, email:r.email, phone:r.phone,
-        role:r.role, submittedAt:r.created_at, files:r.files||[] }));
+        role:r.role, submittedAt:r.created_at, files:r.files||[], application:r.application||{} }));
     }else{
       const res=await SS.list('submission:');
       for(const k of ((res&&res.keys)||[])){
@@ -1228,10 +1438,19 @@ function esc(s){return (s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>
 
 function openFolder(id){
   const s=SUBS_CACHE[id]; if(!s) return;
+  const a=s.application||{};
   const date=new Date(s.submittedAt).toLocaleString();
-  const chips=(s.files||[]).map((f,i)=>`<span class="doc-chip" onclick='downloadFile(${JSON.stringify(String(s.id))},${i})'>
+  const docChip=(f,i)=>`<span class="doc-chip" onclick='downloadFile(${JSON.stringify(String(s.id))},${i})'>
     <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M12 4v12m0 0-5-5m5 5 5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-    ${esc(f.name)}</span>`).join('') || '<span class="meta">No files attached.</span>';
+    ${esc(f.name)}</span>`;
+  const files=s.files||[];
+  const resumeChips=files.map((f,i)=>({f,i})).filter(x=>(x.f.category||'')==='Resume'||!x.f.category).map(x=>docChip(x.f,x.i)).join('') || '<span class="meta">None</span>';
+  const certChips=files.map((f,i)=>({f,i})).filter(x=>(x.f.category||'')==='Certification').map(x=>docChip(x.f,x.i)).join('') || '<span class="meta">None</span>';
+
+  const row=(label,v)=> v ? `<div class="fb-row"><span class="fb-k">${label}</span><span class="fb-v">${esc(String(v))}</span></div>` : '';
+  const list=(label,arr)=> (arr&&arr.length) ? `<div class="fb-row"><span class="fb-k">${label}</span><span class="fb-v">${arr.map(esc).join(', ')}</span></div>` : '';
+  const ref=r=> (r&&(r.name||r.contact)) ? `${esc(r.name||'')}${r.relationship?' ('+esc(r.relationship)+')':''}${r.contact?' — '+esc(r.contact):''}` : '';
+
   $('folderBody').innerHTML=`
     <div class="fb-head">
       <div class="fb-ic">${folderSVG()}</div>
@@ -1244,9 +1463,43 @@ function openFolder(id){
     <div class="sub-contact" style="margin:16px 0">
       <span>✉ <a href="mailto:${esc(s.email)}">${esc(s.email)}</a></span>${s.phone?`<span>☎ ${esc(s.phone)}</span>`:''}
     </div>
-    <div class="fb-label">Documents</div>
-    <div class="sub-files">${chips}</div>
+
+    <div class="fb-label">Personal</div>
+    ${row('Date of birth',a.dob)}${row('Gender',a.gender)}${row('Address',a.address)}
+    ${a.linkedin?`<div class="fb-row"><span class="fb-k">LinkedIn</span><span class="fb-v"><a href="${esc(a.linkedin)}" target="_blank">${esc(a.linkedin)}</a></span></div>`:''}
+    ${row('Heard about us',a.heardFrom)}
+
+    <div class="fb-label">Qualifications</div>
+    ${row('Highest qualification',a.qualification)}${row('Experience',a.experience)}${row('License #',a.license)}
+    ${row('License expiry',a.licenseExpiry)}${row('Issuing state/country',a.issuer)}${row('NPI',a.npi)}
+    ${list('Specialties',a.specialties)}
+
+    <div class="fb-label">Work History</div>
+    ${row('Employer',a.employer)}${row('Job title',a.jobTitle)}
+    ${(a.workStart||a.workEnd)?row('Dates',[a.workStart,a.workEnd].filter(Boolean).join(' → ')):''}
+    ${row('Responsibilities',a.duties)}${row('Reason for leaving',a.reasonLeaving)}${row('Contact employer?',a.contactEmployer)}
+
+    <div class="fb-label">Availability</div>
+    ${row('Employment type',a.employmentType)}${row('Available from',a.availableStart)}
+    ${a.desiredRate?row('Desired rate','$'+a.desiredRate+'/hr'):''}${row('Relocate?',a.relocate)}
+    ${list('Shifts',a.shifts)}${list('Facility types',a.facilities)}
+
+    <div class="fb-label">References</div>
+    ${ref(a.reference1)?`<div class="fb-row"><span class="fb-k">Reference 1</span><span class="fb-v">${ref(a.reference1)}</span></div>`:''}
+    ${ref(a.reference2)?`<div class="fb-row"><span class="fb-k">Reference 2</span><span class="fb-v">${ref(a.reference2)}</span></div>`:''}
+    ${(!ref(a.reference1)&&!ref(a.reference2))?'<div class="fb-row"><span class="fb-v meta">None provided</span></div>':''}
+
+    <div class="fb-label">Additional</div>
+    ${row('Statement',a.statement)}${row('Languages',a.languages)}${row('Authorized to work?',a.authorized)}
+    ${row('Criminal record?',a.criminal)}${row('COVID-19 status',a.covid)}
+
+    <div class="fb-label">CV / Resume</div>
+    <div class="sub-files">${resumeChips}</div>
+    <div class="fb-label" style="margin-top:14px">Certifications / License</div>
+    <div class="sub-files">${certChips}</div>
+
     <div class="fb-actions">
+      <a class="doc-chip" href="mailto:${esc(s.email)}?subject=Your%20Bee%20Connect%20application">Email applicant</a>
       <button class="del" onclick='delSub(${JSON.stringify(String(s.id))})'>Delete submission</button>
     </div>`;
   $('folderModal').classList.add('show');
@@ -1364,6 +1617,9 @@ addEventListener('scroll',()=>{ document.querySelector('.nav').style.boxShadow =
 /* portal: live filters */
 $('subSearch') && $('subSearch').addEventListener('input', e=>renderSubs(e.target.value));
 $('msgSearch') && $('msgSearch').addEventListener('input', e=>renderMsgs(e.target.value));
+
+/* use the real gold logo at the top of the application form */
+(function(){ const fl=$('formLogo'), gl=document.querySelector('.foot-logo'); if(fl&&gl) fl.src=gl.src; })();
 </script>
 </body>
 </html>
